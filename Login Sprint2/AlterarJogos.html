@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Tela de alteração</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+        body{
+            background: #f0f0f0;
+        }
+
+        #container{
+            background-color: #fff;
+            width: 30%;
+            height: 97%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+
+        .LP{
+            display: flex;
+            float: right;
+        }
+
+        .AT{
+            display: flex;
+            float: left;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="container"> <!-- COMEÇO DA ESTILIZAÇÃO -->
+                                                    <!-- Criamos um formulário para a alteração de dados-->
+    <form name = "Alterar">
+        
+        <i>Alterar dados através do api construído:</i> <br>  
+        <!-- precisa do ID do Jogo, pois é através do ID do Jogo para alterar os dados -->
+        <h6>Buscar os dados através do ID do Jogo:</h6>
+        
+        <div class="form-group">
+        <label> ID do jogo: </label>
+        
+        <input class="form-control" type = "number" name = "Id_jogo">
+        
+        <input class="btn btn-outline-secondary btn-block mt-3" type="button" name="btBuscar" value="Buscar" onclick = "buscar(event, this)">
+        
+        </div>
+        
+        <hr>
+
+        <h6>Dados buscados para serem alterados:</h6>
+
+        <div class="form-group">
+
+        <label>Nome do Jogo:</label>
+
+        <input class="form-control" type = "text" name = "txtNome_jogo">
+        
+        <label>Estoque</label> 
+        <input class="form-control" type = "number" name = "txtEstoque">
+        
+        <label>Preço</label> 
+        <input class="form-control" type = "text" name = "txtPreco">
+        
+        <label> Gênero: </label> 
+        <input class="form-control" type = "text" name = "txtGenero">
+        
+        <label>Desenvolvedora: </label>
+        <input class="form-control" type = "text" name = "txtDesenvolvedora">
+        
+        <label>Distribuidora: </label>
+        <input class="form-control" type = "text" name = "txtDistribuidora">
+
+        </div>
+
+        <!-- Criamos 2 botões: um para operação buscar; outro para operação alterar -->        
+        <input class="btn btn-outline-primary AT" type="button" name="btAlterar" value="Alterar" onclick = "alterar(event, this)">
+        <!-- Criamos um botão de limpeza -->
+        <input class="btn btn-outline-danger LP" type = "submit" value = "Limpar">
+        <br/>        
+    </form>
+
+    </div> <!-- FIM DA ESTILIZAÇÃO -->
+
+
+
+
+
+    <!-- Iniciamos a programação JavaScript -->
+    <script type="text/javascript">
+        /* Lógica do algritmo: Buscar dodos primeiro, depois fazer alteração */
+        //Criamos uma função (subprograma/subrotina) para buscar os dados no BD (xampp-MySQL)
+        function buscar(event, form){
+            //Este comando é para prevenir o cancelamento de evento
+            event.preventDefault();
+            //variável ra é um número inteiro. parseInt(...) converte strings para inteiro
+            const id_jogo = parseInt(document.Alterar.Id_jogo.value);          
+           
+            if ( id_jogo != "" ) { //id_jogo não pode ser null, pois através dele para buscar dados           
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/Jogos/'+id_jogo;                   
+                    //Realizar a operação de acordo com método definido
+                    fetch(URL , {method: 'GET'} ) //Método "GET"
+                        //para transformar a resposta de texto puro para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Criamos uma função para alterar os dados no BD (xampp-MySQL)
+        function alterar(event, form){
+            //Este comando é para prevenir o cancelamento do evanto
+            event.preventDefault();
+            //variáveis para obter os dados digitados (dados alterados)
+            const id_jogo        = parseInt(document.Alterar.Id_jogo.value);
+            const nome_jogo      = document.Alterar.txtNome_jogo.value;
+            const estoque        = document.Alterar.txtEstoque.value;
+            const preco          = document.Alterar.txtPreco.value;
+            const genero         = document.Alterar.txtGenero.value;
+            const desenvolvedora = document.Alterar.txtDesenvolvedora.value;
+            const distribuidora  = document.Alterar.txtDistribuidora.value;
+              
+            //uma lista para mapear (armazenar) o conjunto de dados obtidos com campos do BD (xampp:mySQL)
+            const dados = { 
+                id_jogo: id_jogo,
+                nome_jogo: nome_jogo,
+                estoque: estoque,
+                preco: preco,
+                genero: genero,
+                desenvolvedora: desenvolvedora,
+                distribuidora: distribuidora
+            };
+            //uma lista para dados de configuração
+            const options = {
+                method: 'PUT', //método 'put': para alterar os dados
+                headers: {
+                'Content-Type': 'application/json',            
+                },
+                //De formato JSON para formato texto normal
+                body: JSON.stringify(dados),
+            };
+
+            if (id_jogo != "" ) { //Id_jogo não pode ser null, pois através dele para buscar dados           
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/Jogos/'+id_jogo;                
+                    //Realizar a operação de acordo com método definido
+                    fetch(URL , options )
+                        //para transformar a resposta de texto puro para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarRespostaAlterar(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Uma função para mostar uma mensagem, os dados buscados
+        function mostrarResposta(data){
+            console.log(data) ; //mostrar objeto no "inspecionar"       
+            if(data.status != "sucess" ){
+                alert("Jogo não encontrado!!!");
+            } else {
+                //colocando os dados buscados do BD (xampp MySQL) no campos do formulário
+                document.Alterar.Id_jogo.value = data.information.id_jogo;
+                document.Alterar.txtNome_jogo.value = data.information.nome_jogo;
+                document.Alterar.txtEstoque.value = data.information.estoque;
+                document.Alterar.txtPreco.value = data.information.preco;
+                document.Alterar.txtGenero.value = data.information.genero;
+                document.Alterar.txtDesenvolvedora.value = data.information.desenvolvedora;
+                document.Alterar.txtDistribuidora.value = data.information.distribuidora;
+            }
+        }
+        //Uma função para mostrar uma mensagem e os dados alterados
+        function mostrarRespostaAlterar(data){
+            console.log(data) ;  //mostrar objeto no "inspecionar"      
+            if (data.status == "sucess"){
+                //limpar os campos no formulário
+                document.Alterar.Id_jogo.value = "";
+                document.Alterar.txtNome_jogo.value = "";
+                document.Alterar.txtEstoque.value = "";
+                document.Alterar.txtPreco.value = "";
+                document.Alterar.txtGenero.value = "";
+                document.Alterar.txtDesenvolvedora.value = "";
+                document.Alterar.txtDistribuidora.value = "";              
+                alert("Dados alterados com sucesso!!!");
+            } else {
+                alert("Erro ao alterar!!!");
+            }
+        }        
+    </script>
+</body>
+</html>

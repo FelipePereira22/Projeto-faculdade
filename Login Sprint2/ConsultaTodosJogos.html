@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Consultar Todos os Jogos</title>
+    <!-- Estilo para nossa tabela --> 
+    <style>
+        table,td,th {
+            border: solid 1px black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Criamos um conteiner (painel) para colocar uma tabela -->
+    <div id = "tabelaJogos"><h2>Lista de Jogos Disponíveis</h2></div>
+    <!--Iniciamos a programação JavaScript-->
+    <script type = "text/JavaScript">
+        //Endereço do api que construimos
+        const URL = 'http://localhost/GGamEZ/api/Jogos';
+        fetch( URL, {method: 'GET'})
+            .then(resp => resp.json())
+            .then(data => mostrarResposta(data))
+            .catch(erro => console.log(erro));
+        
+        //Criamos a função mostrarResposta(data)
+        function mostrarResposta(data) {
+            console.log(data);
+            if (data.status != "sucess")
+               alert("Sem registro de Jogos!!!");
+            else
+               criarTabela(data.information);
+        }        
+       
+        //criamos a função criaTabela()
+        function criarTabela(conteudo) {
+            //Os elementos da tabela
+            var tabela = document.createElement("table");
+            var cabecalho = document.createElement("thead");
+            var corpo = document.createElement("tbody");
+
+            /*Monstar cabeçalho da tabela */
+            //criamos uma linha:
+            var tr = document.createElement("tr");
+            //criamos 4 colunas 
+            var thId_jogo = document.createElement("th");
+            var thNome_jogo = document.createElement("th");
+            var thEstoque = document.createElement("th");
+            var thPreco = document.createElement("th");
+            var thGenero = document.createElement("th");
+            var thDesenvolvedora = document.createElement("th");
+            var thDistribuidora = document.createElement("th");
+
+            //Adicionar os campos da coluna na linha do cabeçalho
+            thId_jogo.appendChild(document.createTextNode("ID"));
+            tr.appendChild(thId_jogo);
+
+            thNome_jogo.appendChild(document.createTextNode("Nome"));
+            tr.appendChild(thNome_jogo);
+
+            thEstoque.appendChild(document.createTextNode("Estoque"));
+            tr.appendChild(thEstoque);
+
+            thPreco.appendChild(document.createTextNode("Preço"));
+            tr.appendChild(thPreco);
+            
+            thGenero.appendChild(document.createTextNode("Gênero"));
+            tr.appendChild(thGenero);
+
+            thDesenvolvedora.appendChild(document.createTextNode("Desenvolvedora"));
+            tr.appendChild(thDesenvolvedora);
+
+            thDistribuidora.appendChild(document.createTextNode("Distribuidora"));
+            tr.appendChild(thDistribuidora);
+            
+
+            //Adicionar a linha no cabeçalho
+            cabecalho.appendChild(tr);
+
+            //Adicionar o cabeçalho na tabela
+            tabela.appendChild(cabecalho);
+
+            /* Conteudo da tabela: usando .forEach(...) */
+            conteudo.forEach(item =>{
+                var tr = document.createElement("tr");
+                //Registro ID_JOGOS:
+                var tdId_jogo= document.createElement("td");
+                var textoId_jogo = document.createTextNode(item.id_jogo);
+                tdId_jogo.appendChild(textoId_jogo);
+                tr.appendChild(tdId_jogo);
+            
+                //Registro NOME_JOGO:
+                var tdNome_jogo = document.createElement("td");
+                var textoNome_jogo = document.createTextNode(item.nome_jogo);
+                tdNome_jogo.appendChild(textoNome_jogo);
+                tr.appendChild(tdNome_jogo);
+
+                //Registro ESTOQUE:
+                var tdEstoque= document.createElement("td");
+                var textoEstoque= document.createTextNode(item.estoque);
+                tdEstoque.appendChild(textoEstoque);
+                tr.appendChild(tdEstoque);
+
+                //Registro PREÇO:
+                var tdPreco = document.createElement("td");
+                var textoPreco = document.createTextNode(item.preco);
+                tdPreco.appendChild(textoPreco);
+                tr.appendChild(tdPreco);
+
+                //Registro GÊNERO:
+                var tdGenero = document.createElement("td");
+                var textoGenero = document.createTextNode(item.genero);
+                tdGenero.appendChild(textoGenero);
+                tr.appendChild(tdGenero);
+
+                //Registro DESENVOLVEDORA:
+                var tdDesenvolvedora  = document.createElement("td");
+                var textoDesenvolvedora  = document.createTextNode(item.desenvolvedora);
+                tdDesenvolvedora .appendChild(textoDesenvolvedora );
+                tr.appendChild(tdDesenvolvedora );
+
+                //Registro DISTRIBUIDORA:
+                var tdDistribuidora  = document.createElement("td");
+                var textoDistribuidora  = document.createTextNode(item.distribuidora);
+                tdDistribuidora .appendChild(textoDistribuidora );
+                tr.appendChild(tdDistribuidora);
+
+                //Anexar os campos no corpo da tabela
+                corpo.appendChild(tr);
+
+            });
+
+            //Adicionar corpo na tabela
+            tabela.appendChild(corpo);
+            
+            //Adicional a tabela no conteiner (painel) div
+            document.getElementById("tabelaJogos").appendChild(tabela);            
+        } 
+
+    </script>
+    
+</body>
+</html>

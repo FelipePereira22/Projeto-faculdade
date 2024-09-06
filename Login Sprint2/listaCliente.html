@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Serviços</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+
+    <style>
+        body{
+            background: #dbf7e7;
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }        
+       
+
+        #container{
+            background-color: #cdffe3;
+            width: 30%;
+            height: 78%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #323232;
+        }
+
+        .b1{
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin-top: 170px;
+            width: 100%;
+            height: 8%;
+            background: transparent;
+            color: #00581a;
+            border: 2px solid #00581a;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .b2{
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            width: 100%;
+            height: 8%;
+            background: transparent;
+            color: #00581a;
+            border: 2px solid #00581a;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+
+        .b1:hover{
+            background: #00581a;
+            color: #fff;
+            transition: 0.6s;
+        }
+
+        .b2:hover{
+            background: #00581a;
+            color: #fff;
+            transition: 0.6s;
+        }
+
+
+    </style>
+</head>
+
+<body>   
+    <!-- Uma lista de Serviços -->
+    <div id = "container" class="container">
+        <h2 class="text-center mt-4 mb-4">Lista de acesso - Cliente</h2>
+        <button class="btn btn-outline-dark btn-block b1" onclick="window.location.href ='ConsultarClienteProprio.html';">Consulte seus Dados</button>
+        <br><br>
+        <button class="btn btn-outline-dark btn-block b2" onclick="window.location.href ='Login.html';">Voltar para a Tela de Login</button> 
+    </div>       
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!-- Cadastrar ou incluir os dados através do formulário (tela) e enviar para BD (xampp-MySQL) -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Inserindo dados</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+        body{
+              background: #f0f0f0;
+              font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        #container{
+            background-color: #fff;
+            width: 30%;
+            height: 94%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <!-- Criamos um formulário para cadastar os Jogos -->
+        <form name = "cadastro">
+           <br> <i class="">Enviando dados ao BD (através do api construido):</i> <br><br>  
+            <!-- ID_jogo não precisa, pois é automático -->
+
+            <div class="form-group">
+                <label>Nome:</label>
+                <input class="form-control" type = "text" placeholder="Insira o Nome do Jogo" name = "txtNome">
+            </div>
+
+            <div class="form-group">
+                <label>Estoque:</label>
+                <input class="form-control" type = "number" placeholder="Insira o Estoque" name = "txtEstoque">
+            </div>
+
+            <div class="form-group">
+                <label>Preço:</label>
+                <input class="form-control" type = "number" placeholder="Insira o Preço" name = "txtPreco">
+            </div>
+            
+            <div class="form-group">
+                <label>Gênero:</label>
+                <input class="form-control" type = "text" placeholder="Insira o Gênero do Jogo" name = "txtGenero">
+            </div>
+            
+            <div class="form-group">
+                <label>Desenvolvedora:</label>
+                <input class="form-control" type = "text" placeholder="Insira a Desenvolvedora" name = "txtDesenvolvedora">
+            </div>
+
+            <div class="form-group">
+                <label>Distribuidora:</label>
+                <input class="form-control mb-4" type = "text"  placeholder="Insira a Distribuidora" name = "txtDistribuidora">
+            </div>
+             
+                <!--Criamos dois botões -->
+                <input class="btn btn-outline-primary btn-block" type = "button" name = "btSalvar" value = "Incluir"  onclick = "salvar(event, this)">
+                <input class="btn btn-outline-danger btn-block type = "reset" value = "Limpar">
+                
+            
+
+        </form>
+    </div>
+    <!-- Iniciamos a programação JavaScript -->
+    <script type = "text/javascript">
+        //Criamos uma função (subprograma) para enviar os dados digitados ao BD (xampp-MySQL)
+        function salvar(event, form){
+            //Este comando (ou método) é para prevenir o cancelamento de evanto
+            event.preventDefault();
+            //variáveis para obter os dados digitados por usuario
+            const Nome = document.cadastro.txtNome.value;
+            const Estoque = document.cadastro.txtEstoque.value;
+            const Preco  = document.cadastro.txtPreco.value;
+            const Genero = document.cadastro.txtGenero.value;
+            const Desenvolvedora = document.cadastro.txtDesenvolvedora.value;
+            const Distribuidora = document.cadastro.txtDistribuidora.value;  
+            //uma lista para armazenar conjunto de dados obtidos
+            const dados = { 
+                nome_jogo: Nome,  
+                estoque: Estoque, 
+                preco: Preco,
+                genero: Genero,
+                desenvolvedora: Desenvolvedora,
+                distribuidora: Distribuidora,
+
+            };
+            //uma lista para dados de configuração
+            const options = {
+                method: 'POST', //método 'post': para enviar os dados
+                headers: {
+                'Content-Type': 'application/json',            
+                },
+                //O comando JSON.stringify(dados) converter formato JSON para formato texto
+                body: JSON.stringify(dados),
+            };
+            //verifcar o campo do Nome:
+            if ( Nome != "" ) {         
+                    //Endereço do api que construimos para cadastar os dados no BD
+                    const URL = 'http://localhost/GGamEZ/api/Jogos/';
+                    fetch(URL , options) //operação para executar cadastro                      
+                        /*Uma Arrow function é exatamente como uma função/callback normal */ 
+                        .then(resp => resp.json())                                        
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Uma função para mostar uma mensagem de alerta "Dados incluidos com sucesso"
+        function mostrarResposta(data,form){
+            //alert("Dados incluídos com sucesso");            
+            // tipo de dados internos */
+            console.log(data) ; 
+            if (data.status == "sucess"){
+                alert("Dados incluidos com sucesso!!!");
+            } else {
+                alert("Erro ao incluir!!!");
+            }                                  
+        }
+    </script>
+</body>
+</html>

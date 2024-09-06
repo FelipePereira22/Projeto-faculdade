@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GGamEZ</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+        body{
+              background: #f0f0f0;
+              font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        #container{
+            background-color: #fff;
+            width: 30%;
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+    </style>
+
+</head>
+<body>
+        <div class="container" id="container">
+            <form name = "Consultar">
+                <h6 class="text-center mt-3 mb-3">Insira o ID do Jogo para realizar a busca</h6>
+
+                <div class="form-group">
+                    <label for="">Id do jogo: </label>
+                    <input class="form-control" type = "number" placeholder="Insira o ID do Jogo" name = "txtid_jogo">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Nome do jogo: </label>
+                    <input class="form-control" type = "text" name = "txtnome_jogo">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Estoque: </label>
+                    <input class="form-control" type = "number" name = "txtestoque">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Preço: </label>
+                    <input class="form-control" type = "number" name = "txtpreco">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Gênero: </label>
+                    <input class="form-control" type = "text" name = "txtgenero">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Desenvolvedora: </label>
+                    <input class="form-control" type = "text" name = "txtdesenvolvedora">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Distribuidora: </label>
+                    <input class="form-control" type = "text" name = "txtdistribuidora">
+                </div>
+
+
+                <input class="btn btn-outline-success btn-block" type = "button" name = "btBuscar" value="Consultar" onclick="buscar(event,this)">
+                <input class="btn btn-outline-danger btn-block" type = "reset" value = "Limpar">
+
+
+
+            </form>
+
+        </div>
+
+
+
+
+
+
+
+    <!-- Iniciamos programação Javascript -->
+    <script type="text/Javascript">
+    //Iniciamos uma função(subprograma) para buscar os dados no BD(xampp-MySQL).
+    function buscar(event, form){
+        //Este comando é para prevenir o cancelamento de evento de click de buscar os dados.
+        event.preventDefault();
+        //A variável CPF é um número inteiro, parseInt(...) converte o texto para número inteiro.
+        const id_jogo = parseInt(document.Consultar.txtid_jogo.value);
+            if ( id_jogo != "" ) { //CPF não pode ser null, pois através dele para buscar dados
+                    //Endereço do api que construimos   
+                    const URL = 'http://localhost/GGamEZ/api/Jogos/'+id_jogo;
+                    //fetch(URL , options): comando para buscar os dados
+                    fetch( URL , {method: 'GET'} )
+                                     
+                        /*Uma Arrow function é exatamente como uma função/callback normal */ 
+                        //para transformar a resposta de texto puro para JSON  
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));
+        }
+        function mostrarResposta(data) {
+            //alert("Dados buscados com sucesso")
+            //pode ter ou não.
+            console.log(data);
+            //colocando os dados buscados nos campos do formulário.
+            document.Consultar.txtid_jogo.value = data.information.id_jogo;
+            document.Consultar.txtnome_jogo.value = data.information.nome_jogo;
+            document.Consultar.txtestoque.value = data.information.estoque;
+            document.Consultar.txtpreco.value = data.information.preco;
+            document.Consultar.txtgenero.value = data.information.genero;
+            document.Consultar.txtdesenvolvedora.value = data.information.desenvolvedora;
+            document.Consultar.txtdistribuidora.value = data.information.distribuidora; 
+        }
+    }
+    </script>
+    
+</body>
+</html>

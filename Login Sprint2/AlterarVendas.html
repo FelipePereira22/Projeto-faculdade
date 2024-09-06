@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Tela de alteração</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+    body
+    {
+       background: #f0f0f0;
+       font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+     #container{
+        background-color: #fff;
+        width: 30%;
+        height: 83%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 6px;
+        box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container form-group" id="container">
+    <!-- Criamos um formulário para a alteração de dados-->
+        <form name = "Alterar">
+            
+    <br>    <i>Alterar dados através do api construído:</i>   <br> <br>     
+            <!-- precisa do id_compra, pois é através do id_compra para alterar os dados -->
+            <h6 class="text-center">Buscar os dados através RA:</h6>      
+            <div class="form-group"> 
+                <label> ID da compra: </label>
+                <input class="form-control" type = "number" name = "Id_compra">
+                <input class="btn btn-outline-secondary btn-block mt-3" type="button" name="btBuscar" value="Buscar" onclick = "buscar(event, this)">
+            </div>
+            
+            <hr>
+            
+            <h6 class="text-center">Dados buscados para serem alterados:</h6>    
+
+            <div class="form-group">
+                <label>CPF do cliente: </label>
+                <input class="form-control" type = "text" name = "CPF" id="cpf5" maxlength="11">
+                
+                <label>ID do Jogo: </label>
+                <input class="form-control" type = "number" name= "Id_jogo">
+                
+                <label>Data da Compra: </label>
+                <input class="form-control" type = "datetime-local" id="data" name = "txtDataCompra">
+            </div>
+            <!-- Criamos 2 botões: um para operação buscar; outro para operação alterar -->        
+            <input class="btn btn-block btn-outline-primary" type="button" name="btAlterar" value="Alterar" onclick = "alterar(event, this)">
+            <!-- Criamos um botão de limpeza -->
+            <input class="btn btn-block btn-outline-danger" type = "submit" value = "Limpar">
+                    
+        </form>
+    </div>
+    
+    <!-- Iniciamos a programação JavaScript -->
+    <script type="text/javascript">
+
+
+        //cpf certo
+
+        var cpf = document.querySelector("#cpf5");
+        cpf.addEventListener("blur", function(){
+                if(cpf.value) cpf.value = cpf.value.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/,"-");
+                });
+        /* Lógica do algritmo: Buscar dodos primeiro, depois fazer alteração */
+        //Criamos uma função (subprograma/subrotina) para buscar os dados no BD (xampp-MySQL)
+        function buscar(event, form){
+            //Este comando é para prevenir o cancelamento de evento
+            event.preventDefault();
+            //variável ra é um número inteiro. parseInt(...) converte strings para inteiro
+            const id_compra = parseInt(document.Alterar.Id_compra.value);          
+           
+            if ( id_compra != "" ) { //RA não pode ser null, pois através dele para buscar dados           
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/vendas/'+id_compra;                    
+                    //Realizar a operação de acordo com método definido
+                    fetch(URL , {method: 'GET'} ) //Método "GET"
+                        //para transformar a resposta de texto puro para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Criamos uma função para alterar os dados no BD (xampp-MySQL)
+        function alterar(event, form){
+            //Este comando é para prevenir o cancelamento do evanto
+            event.preventDefault();
+            //variáveis para obter os dados digitados (dados alterados)
+            const id_compra       = parseInt(document.Alterar.Id_compra.value);
+            const cpf             = document.Alterar.CPF.value;
+            const id_jogo         = document.Alterar.Id_jogo.value;
+            const data_compra     = document.Alterar.txtDataCompra.value;
+              
+            //uma lista para mapear (armazenar) o conjunto de dados obtidos com campos do BD (xampp:mySQL)
+            const dados = { 
+                id_compra: id_compra,
+                cpf: cpf,
+                id_jogo: id_jogo,
+                data_compra: data_compra
+            };
+            //uma lista para dados de configuração
+            const options = {
+                method: 'PUT', //método 'put': para alterar os dados
+                headers: {
+                'Content-Type': 'application/json',            
+                },
+                //De formato JSON para formato texto normal
+                body: JSON.stringify(dados),
+            };
+
+            if (id_compra != "" ) { //RA não pode ser null, pois através dele para buscar dados           
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/vendas/'+id_compra;                   
+                    //Realizar a operação de acordo com método definido
+                    fetch(URL , options )
+                        //para transformar a resposta de texto puro para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarRespostaAlterar(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Uma função para mostar uma mensagem, os dados buscados
+        function mostrarResposta(data){
+            console.log(data) ; //mostrar objeto no "inspecionar"       
+            if(data.status != "sucess" ){
+                alert("Venda não encontrado!!!");
+            } else {
+                //colocando os dados buscados do BD (xampp MySQL) no campos do formulário
+                document.Alterar.Id_compra.value = data.information.id_compra;
+                document.Alterar.CPF.value = data.information.cpf;
+                document.Alterar.Id_jogo.value = data.information.id_jogo;
+                document.Alterar.txtDataCompra.value = data.information.data_compra;
+            }
+        }
+        //Uma função para mostar uma mensagem e os dados alterados
+        function mostrarRespostaAlterar(data){
+            console.log(data) ;  //mostrar objeto no "inspecionar"      
+            if (data.status == "sucess"){
+                //limpar os campos no formulário
+                document.Alterar.Id_compra.value = "";
+                document.Alterar.CPF.value = "";
+                document.Alterar.Id_jogo.value = "";
+                document.Alterar.txtDataCompra.value = "";               
+                alert("Dados alterados com sucesso!!!");
+            } else {
+                alert("Erro ao alterar!!!");
+            }
+        }        
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Consultar Todos os Clientes</title>
+    <!-- Estilo para nossa tabela --> 
+    <style>
+        table,td,th {
+            border: solid 1px black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Criamos um conteiner (painel) para colocar uma tabela -->
+    <div id = "tabelaClientes"><h2>Lista de Clientes</h2></div>
+    <!--Iniciamos a programação JavaScript-->
+    <script type = "text/JavaScript">
+        //Endereço do api que construimos
+        const URL = 'http://localhost/GGamEZ/api/Clientes';
+        fetch( URL, {method: 'GET'})
+            .then(resp => resp.json())
+            .then(data => mostrarResposta(data))
+            .catch(erro => console.log(erro));
+        
+        //Criamos a função mostrarResposta(data)
+        function mostrarResposta(data) {
+            console.log(data);
+            if (data.status != "sucess")
+               alert("Sem registro de Clientes!!!");
+            else
+               criarTabela(data.information);
+        }        
+       
+        //criamos a função criaTabela()
+        function criarTabela(conteudo) {
+            //Os elementos da tabela
+            var tabela = document.createElement("table");
+            var cabecalho = document.createElement("thead");
+            var corpo = document.createElement("tbody");
+
+            /*Monstar cabeçalho da tabela */
+            //criamos uma linha:
+            var tr = document.createElement("tr");
+            //criamos 4 colunas 
+            var thNome_cliente = document.createElement("th");
+            var thCPF = document.createElement("th");
+            var thTelefone = document.createElement("th");
+
+            //Adicionar os campos da coluna na linha do cabeçalho
+
+            thNome_cliente.appendChild(document.createTextNode("Nome_cliente"));
+            tr.appendChild(thNome_cliente);
+
+            thCPF.appendChild(document.createTextNode("CPF"));
+            tr.appendChild(thCPF);
+
+            thTelefone.appendChild(document.createTextNode("Telefone"));
+            tr.appendChild(thTelefone);
+
+            //Adicionar a linha no cabeçalho
+            cabecalho.appendChild(tr);
+
+            //Adicionar o cabeçalho na tabela
+            tabela.appendChild(cabecalho);
+
+            /* Conteudo da tabela: usando .forEach(...) */
+            conteudo.forEach(item =>{
+                var tr = document.createElement("tr");
+                //Registro Nome do Cliente:
+                var tdNome_cliente = document.createElement("td");
+                var textoNome_cliente = document.createTextNode(item.nome_cliente);
+                tdNome_cliente.appendChild(textoNome_cliente);
+                tr.appendChild(tdNome_cliente);
+
+                //Registro CPF:
+                var tdCPF= document.createElement("td");
+                var textoCPF= document.createTextNode(item.cpf);
+                tdCPF.appendChild(textoCPF);
+                tr.appendChild(tdCPF);
+
+                //Registro Telefone:
+                var tdTelefone = document.createElement("td");
+                var textoTelefone = document.createTextNode(item.telefone);
+                tdTelefone.appendChild(textoTelefone);
+                tr.appendChild(tdTelefone);
+
+                //Anexar os campos no corpo da tabela
+                corpo.appendChild(tr);
+
+            });
+
+            //Adicionar corpo na tabela
+            tabela.appendChild(corpo);
+            
+            //Adicional a tabela no conteiner (painel) div
+            document.getElementById("tabelaClientes").appendChild(tabela);            
+        } 
+
+    </script>
+    
+</body>
+</html>

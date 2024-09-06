@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GGamEZ</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+        body{
+              background: #f0f0f0;
+              font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        #container{
+            background-color: #fff;
+            width: 30%;
+            height: 60%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+
+    </style>
+</head>
+<body>
+    
+
+        <div class="form-group container" id="container">
+            <form name = "Consultar">
+             <br>   <i>Buscando dados de Clientes através do CPF do Cliente</i>
+
+            <div class="form-group mt-4">
+                <label for="">Nome:</label> 
+                <input class="form-control" type = "text" name = "txtNome">
+            </div>
+
+            <div class="form-group">
+                <label for="">CPF:</label> 
+                <input class="form-control" type = "text" placeholder="Insira o CPF do cliente" name = "txtCPF" id="cpf3" maxlength="11">
+            </div>
+                
+            <div class="form-group">
+                <label for="">Telefone:</label> 
+                <input class="form-control" type = "text" name = "txtTelefone">
+            </div>
+            
+                <input class="btn btn-outline-success btn-block mt-4" type = "button" name = "btBuscar" value="Consultar" onclick="buscar(event,this)">
+        
+                <input class="btn btn-outline-danger btn-block" type = "reset" value = "Limpar"><br/>
+            </form>
+        </div>
+
+
+
+
+    <!-- Iniciamos programação Javascript -->
+    <script type="text/Javascript">
+
+        //cpf correto
+        var cpf = document.querySelector("#cpf3");
+
+        cpf.addEventListener("blur", function(){
+        if(cpf.value) cpf.value = cpf.value.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/,"-");
+        });
+
+
+    //Iniciamos uma função(subprograma) para buscar os dados no BD(xampp-MySQL).
+    function buscar(event, form){
+        //Este comando é para prevenir o cancelamento de evento de click de buscar os dados.
+        event.preventDefault();
+        //A variável CPF é um número inteiro, parseInt(...) converte o texto para número inteiro.
+        const CPF = document.Consultar.txtCPF.value;
+            if ( CPF != "" ) { //CPF não pode ser null, pois através dele para buscar dados
+                    //Endereço do api que construimos   
+                    const URL = 'http://localhost/GGamEZ/api/Clientes/'+ CPF;
+                    //fetch(URL , options): comando para buscar os dados
+                    fetch( URL , {method: 'GET'} )
+                                     
+                        /*Uma Arrow function é exatamente como uma função/callback normal */ 
+                        //para transformar a resposta de texto puro para JSON  
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));
+        }
+        function mostrarResposta(data) {
+            //alert("Dados buscados com sucesso")
+            //pode ter ou não.
+            console.log(data);
+            //colocando os dados buscados nos campos do formulário.
+            document.Consultar.txtNome.value = data.information.nome_cliente;
+            //document.Consultar.txtCPF.value = data.information.cpf;
+            document.Consultar.txtTelefone.value = data.information.telefone; 
+        }
+    }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>ConsultaAll</title>
+    <!-- Estilo para nossa tabela --> 
+    <style>
+        table,td,th {
+            border: solid 1px black;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Criamos um conteiner (painel) para colocar uma tabela -->
+    <div id = "tabelaVendas"><h2>Registro de Vendas</h2></div>
+
+    <!--Iniciamos a programação JavaScript-->
+    <script type = "text/JavaScript">
+        
+        //Endereço do api que construimos
+        const URL = 'http://localhost/GGamEZ/api/Vendas';
+        fetch( URL, {method: 'GET'})
+            .then(resp => resp.json())
+            .then(data => mostrarResposta(data))
+            .catch(erro => console.log(erro));
+
+        //Criamos a função mostrarResposta(data)
+        function mostrarResposta(data) {
+            console.log(data);
+            if (data.status != "sucess")
+               alert("Sem registro de Vendas!!!");
+            else
+               criarTabela(data.information);
+        }        
+       
+        //criamos a função criaTabela()
+        function criarTabela(conteudo) {
+            //Os elementos da tabela
+            var tabela = document.createElement("table");
+            var cabecalho = document.createElement("thead");
+            var corpo = document.createElement("tbody");
+
+            /*Mostrar cabeçalho da tabela */
+            //criamos uma linha:
+            var tr = document.createElement("tr");
+            //criamos 4 colunas 
+            var thId_compra = document.createElement("th");
+            var thCPF = document.createElement("th");
+            var thId_jogo = document.createElement("th");
+            var thData_compra = document.createElement("th");
+
+            //Adicionar os campos da coluna na linha do cabeçalho
+            
+            thId_compra.appendChild(document.createTextNode("ID da Compra"));
+            tr.appendChild(thId_compra);
+
+            thCPF.appendChild(document.createTextNode("CPF do Cliente"));
+            tr.appendChild(thCPF);
+
+            thId_jogo.appendChild(document.createTextNode("ID do Jogo"));
+            tr.appendChild(thId_jogo);
+
+            thData_compra.appendChild(document.createTextNode("Data da Compra"));
+            tr.appendChild(thData_compra);
+
+            //Adicionar a linha no cabeçalho
+            cabecalho.appendChild(tr);
+
+            //Adicionar o cabeçalho na tabela
+            tabela.appendChild(cabecalho);
+
+            /* Conteudo da tabela: usando .forEach(...) */
+            conteudo.forEach(item =>{
+                var tr = document.createElement("tr");
+
+                //Registro ID_COMPRA:
+                var tdId_compra = document.createElement("td");
+                var textoId_compra = document.createTextNode(item.id_compra);
+                tdId_compra.appendChild(textoId_compra);
+                tr.appendChild(tdId_compra);
+            
+                //Registro CPF:
+                var tdCPF = document.createElement("td");
+                var textoCPF = document.createTextNode(item.cpf);
+                tdCPF.appendChild(textoCPF);
+                tr.appendChild(tdCPF);
+
+                //Registro ID_JOGO:
+                var tdId_jogo = document.createElement("td");
+                var textoId_jogo = document.createTextNode(item.id_jogo);
+                tdId_jogo.appendChild(textoId_jogo);
+                tr.appendChild(tdId_jogo);
+
+                //Registro DATA_COMPRA:
+                var tdData_compra = document.createElement("td");
+                var textoData_compra = document.createTextNode(item.data_compra);
+                tdData_compra.appendChild(textoData_compra);
+                tr.appendChild(tdData_compra);
+
+                //Anexar os campos no corpo da tabela
+                corpo.appendChild(tr);
+
+            });
+
+            //Adicionar corpo na tabela
+            tabela.appendChild(corpo);
+            
+            //Adicional a tabela no conteiner (painel) div
+            document.getElementById("tabelaVendas").appendChild(tabela);
+               
+        } 
+
+    </script>
+
+    
+    
+</body>
+</html>

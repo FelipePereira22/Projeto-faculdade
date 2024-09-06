@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Tela de exclusão</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+        body{
+              background: #f0f0f0;
+              font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        #container{
+            background-color: #fff;
+            width: 30%;
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+        .bt1{
+            display: flex;
+            float: right;
+            
+        }
+
+        .bt2{
+            display: flex;
+            float: left;
+
+        }
+
+        .bt3{
+            display: fixed;
+            margin-top: 60px;
+        }
+
+    </style>
+
+<body>
+
+    <div class="container" id="container">
+    
+    <form name = "Excluir">
+    <br> <i>Excluir dados através do api construído:</i>    
+        
+        <div class="form-group mt-1">
+        <label for="">ID_jogo:</label>
+        <input class="form-control" type = "number" placeholder="Insira o ID_jogo" name = "txtid_jogo">
+        </div>
+
+        <div class="form-group">
+        <label for="">Nome do Jogo:</label>
+        <input class="form-control" type = "text" name = "txtNome_jogo">
+        </div>
+
+        <div class="form-group">
+        <label for="">Estoque:</label>
+        <input class="form-control" type = "number" name = "txtEstoque">
+        </div>
+
+        <div class="form-group">
+        <label for="">Preço:</label>
+        <input class="form-control" type = "text" name = "txtPreco">
+        </div>
+
+        <div class="form-group">
+        <label for="">Gênero:</label>
+        <input class="form-control" type = "text" name = "txtGenero">
+        </div>
+
+        <div class="form-group">
+        <label for="">Desenvolvedora</label>:
+        <input class="form-control" type = "text" name = "txtDesenvolvedora">
+        </div>
+
+        <div class="form-group">
+        <label for="">Distribuidora:</label>
+        <input class="form-control" type = "text" name = "txtDistribuidora">
+        </div>    
+       
+ 
+        <input class="btn btn-outline-dark bt1" type="button" name="btExcluir" value="Excluir" onclick="excluir(event, this)">
+        <input class="btn btn-outline-danger bt2" type = "submit" value = "Limpar">
+        <input class="btn btn-outline-primary btn-block bt3" type="button" name="btBuscar" value="Buscar" onclick="buscar(event, this)">
+            
+    </form>
+
+
+
+
+
+
+    <!-- Iniciamos a programação JavaScript -->
+    <script type="text/javascript" >
+        /* Lógica de algoritmos: Buscar dados primeiro, depios exclui-los !!! */
+        //Criamos uma função (subprograma) para buscar os dados no BD (xampp-MySQL)
+        function buscar(event, form){
+            //Este comando é para prevenir o cancelamento de evento
+            event.preventDefault();
+            //variáveis para obter os dados digitados
+            const id_jogo  = parseInt(document.Excluir.txtid_jogo.value);         
+         
+            if ( id_jogo != "" ) {            
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/Jogos/'+id_jogo;                   
+
+                    fetch( URL , {method: 'GET'} ) //Método "GET"
+                        //para transformar a resposta de texto para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Criamos uma função (subprograma) para excluir os dados no BD (xampp-MySQL)
+        function excluir(event, form){
+            //Este comando é para prevenir o cancelamento de evanto
+            event.preventDefault();
+            //variáveis para obter os dados digitados
+            const id_jogo = parseInt(document.Excluir.txtid_jogo.value);
+
+            if ( id_jogo != "" ) {            
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/Jogos/'+id_jogo;                    
+
+                     fetch( URL , {method: 'DELETE'} ) //Método "DELETE"
+                        //para transformar a resposta de texto para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarRespostaDelete(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Uma função para mostar uma mensagem e os dados buscados
+        function mostrarResposta(data){
+            console.log(data) ;       
+            if(data.status != 'sucess'){
+                alert("Cliente não encontrado!!!");
+            } else {
+                //Colocando os dados buscados nos campos do formulário para serem excluidos
+                document.Excluir.txtid_jogo.value = data.information.id_jogo;
+                document.Excluir.txtNome_jogo.value = data.information.nome_jogo;
+                document.Excluir.txtEstoque.value = data.information.estoque;
+                document.Excluir.txtPreco.value = data.information.preco;
+                document.Excluir.txtGenero.value = data.information.genero;
+                document.Excluir.txtDesenvolvedora.value = data.information.desenvolvedora;
+                document.Excluir.txtDistribuidora.value = data.information.distribuidora;
+            }
+        }
+        //Uma função para mostar uma mensagem e limpar os dados nos campos do formulário
+        function mostrarRespostaDelete(data){
+            console.log(data) ;       
+            if(data.status == "sucess"){
+                alert("Dados excluído com sucesso!!!");
+            } else {
+                alert("Erro ao excluir!!!");
+            }
+            //limpar os dados nos campos do formulário
+            document.Excluir.txtid_jogo.value = "";
+                document.Excluir.txtNome.value = "";
+                document.Excluir.txtEstoque.value = "";
+                document.Excluir.txtPreco.value = "";
+                document.Excluir.txtGenero.value = "";
+                document.Excluir.txtDesenvolvedora.value = "";
+                document.Excluir.txtDistribuidora.value = "";
+        }        
+    </script>
+</body>
+</html>

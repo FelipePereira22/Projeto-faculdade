@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Tela de exclusão</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+    <style>
+
+        body{
+              background: #f0f0f0;
+              font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        #container{
+            background-color: #fff;
+            width: 30%;
+            height: 68%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #b5b2b2;
+        }
+
+        .btt1{
+            display: flex;
+            float: right;
+            
+        }
+
+        .btt2{
+            display: flex;
+            float: left;
+
+        }
+
+        .btt3{
+            display: fixed;
+            margin-top: 70px;
+        }
+
+    </style>
+
+<body>
+        <div class="container" id="container">
+            <form name = "Excluir">
+          <br>  <p2>Excluir dados através do api construído:</p2>    
+                
+                <div class="form-group mt-3">
+                <label for="">ID da compra:</label>
+                <input class="form-control" type="number" placeholder="Insira o ID da Compra" maxlength="11" minlength="11" name="Id_compra">
+                
+                <div class="form-group">
+                 <label for="">CPF do cliente:</label> 
+                <input class="form-control" type="text" name="CPF" id="cpf8" maxlength="11" minlength="11">
+                </div>
+
+                <div class="form-group">
+                <label for="">ID do jogo:</label>
+                <input class="form-control" type = "number" name = "txtid_jogo">
+                </div>
+
+                <div class="form-group">
+                <label for="">Data da compra:</label> 
+                <input class="form-control" type = "datetime" name = "txtdata_compra">
+                </div>
+
+                
+                <input class="btn btn-outline-dark btt1" type="button" name="btExcluir" value="Excluir" onclick="excluir(event, this)">
+                <input class="btn btn-outline-danger btt2" type = "submit" value = "Limpar">
+                <input class="btn btn-outline-primary btt3 btn-block" type="button" name="btBuscar" value="Buscar" onclick="buscar(event, this)">
+                        
+            </form>
+        </div>
+    <!-- Iniciamos a programação JavaScript -->
+    <script type="text/javascript" >
+
+        //cpf certo
+        var cpf = document.querySelector("#cpf8");
+
+        cpf.addEventListener("blur", function(){
+        if(cpf.value) cpf.value = cpf.value.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/,"-");
+        });
+        /* Lógica de algoritmos: Buscar dados primeiro, depios exclui-los !!! */
+        //Criamos uma função (subprograma) para buscar os dados no BD (xampp-MySQL)
+        function buscar(event, form){
+            //Este comando é para prevenir o cancelamento de evento
+            event.preventDefault();
+            //variáveis para obter os dados digitados
+            const id_compra  = parseInt(document.Excluir.Id_compra.value);         
+         
+            if ( id_compra != "" ) {            
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/vendas/'+id_compra;                   
+
+                    fetch( URL , {method: 'GET'} ) //Método "GET"
+                        //para transformar a resposta de texto para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarResposta(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Criamos uma função (subprograma) para excluir os dados no BD (xampp-MySQL)
+        function excluir(event, form){
+            //Este comando é para prevenir o cancelamento de evanto
+            event.preventDefault();
+            //variáveis para obter os dados digitados
+            const id_compra = parseInt(document.Excluir.Id_compra.value);
+
+            if ( id_compra != "" ) {            
+                    //Endereço do api que construimos
+                    const URL = 'http://localhost/GGamEZ/api/vendas/'+id_compra;                  
+
+                     fetch( URL , {method: 'DELETE'} ) //Método "DELETE"
+                        //para transformar a resposta de texto para JSON
+                        /*Uma Arrow function é exatamente como uma função/callback normal */   
+                        .then(resp => resp.json())                                    
+                        .then(data => mostrarRespostaDelete(data))
+                        //Além disso podemos utilizar o método catch() para tratar erros.
+                        //e a mensagem de erros estará console
+                        .catch(erro => console.log(erro));            
+            }
+        }
+        //Uma função para mostar uma mensagem e os dados buscados
+        function mostrarResposta(data){
+            console.log(data) ;       
+            if(data.status != 'sucess'){
+                alert("Cliente não encontrado!!!");
+            } else {
+                //Colocando os dados buscados nos campos do formulário para serem excluidos
+                document.Excluir.Id_compra.value = data.information.id_compra;
+                document.Excluir.CPF.value = data.information.cpf;
+                document.Excluir.txtid_jogo.value = data.information.id_jogo;
+                document.Excluir.txtdata_compra.value = data.information.data_compra;                
+            }
+        }
+        //Uma função para mostar uma mensagem e limpar os dados nos campos do formulário
+        function mostrarRespostaDelete(data){
+            console.log(data) ;       
+            if(data.status == "sucess"){
+                alert("Dados excluído com sucesso!!!");
+            } else {
+                alert("Erro ao excluir!!!");
+            }
+            //limpar os dados nos campos do formulário
+            document.Excluir.Id_compra.value = "";
+                document.Excluir.CPF.value = "";
+                document.Excluir.txtid_jogo.value = "";
+                document.Excluir.txtdata_compra.value = "";          
+        }        
+    </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de todos os Serviços</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="icon" href="imagem/controle.png">
+
+    <style>
+        body{
+            background: #d1f3ff;
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }        
+       
+
+        #container{ 
+            background-color: rgb(183, 238, 255);
+            width: 80%;
+            height: 82%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 6px;
+            box-shadow: 10px 10px 10px #2e2e2e;
+        }
+
+        .caixa{
+            padding: 25px 0px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .btV{
+            width: 100%;
+            height: 13%;
+            background: transparent;
+            color: #004053;
+            border: 2px solid #00c2fd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btV:hover{
+            background: #00c2fd;
+            color: #fff;
+            transition: 0.6s;
+        }
+
+        .bot{
+            background: transparent;
+            width: 100%;
+            height: 38px;
+            margin-top: 100px;
+            color: #004053;
+            border: 2px solid #00c2fd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .bot:hover{
+            background: #00c2fd;
+            color: #fff;
+            transition: 0.6s;}
+        
+        
+        h3{
+            color: #000;
+            text-align: center;
+            margin-top: 29px;
+            margin-bottom: 35px;
+        }
+
+        h2{
+            color: #000;
+            text-align: center;
+            
+        }
+
+    </style>
+</head>
+<body> 
+
+        <section class="caixa" id="container">
+
+            <div class="container">
+                
+                <h2>Lista de acesso - Administrador</h2>
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <h3>Clientes</h3>
+
+                        <button class="btV" onclick="window.location.href ='ConsultarClientes.html';">Consultar Cliente por CPF</button> <br> <br>
+                        <button class="btV" onclick="window.location.href ='ConsultaTodosClientes.html'">Consultar todos os clientes</button> <br> <br>
+                        <button class="btV" onclick="window.location.href ='CadastroClientes.html';"> Adicionar um novo cliente</button> <br> <br>
+                        <button class="btV" onclick="window.location.href ='AlterarClientes.html';">Alterar dados de um cliente</button>  <br>  <br>         
+                        <button class="btV" onclick="window.location.href ='ExcluirClientes.html';" >Deletar um cliente</button> <br> <br>
+  
+                    </div>
+                    
+
+                    <div class="col-md-4">
+
+                        <h3>Jogos</h3>
+
+                        <button class="btV" onclick="window.location.href ='ConsultarJogos.html';">Consultar um jogo por ID</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='ConsultaTodosJogos.html';">Consultar todos os jogos</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='CadastroJogos.html'">Adicionar um novo jogo</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='AlterarJogos.html';">Alterar dados de um jogo</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='ExcluirJogos.html';">Deletar um jogo</button>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <h3>Vendas</h3>
+
+                        <button class="btV" onclick="window.location.href ='ConsultarVendas.html';">Consultar vendas por ID</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='ConsultaTodasVendas.html';">Consultar todas as vendas</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='CadastroVendas.html';">Adicionar uma nova venda</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='AlterarVendas.html';">Alterar dados de uma venda</button> <br><br>
+                        <button class="btV" onclick="window.location.href ='ExcluirVendas.html';"> Deletar uma venda</button> 
+
+                    </div>
+
+
+                </div>
+                
+                <div>
+                 <button class="bot" onclick="window.location.href ='Login.html'">Voltar ao menu</button>
+                </div>
+
+
+            </div>
+
+
+
+        </section>
+
+    
+
+
+
+        
+
+    
+</body>
+</html>
